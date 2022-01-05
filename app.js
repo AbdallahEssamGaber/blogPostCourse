@@ -22,7 +22,7 @@ app.use(express.static("public"));
 
 
 app.get("/", function(req,res){
-  res.render("home", {homeStartingContent: homeStartingContent});
+  res.render("home", {homeStartingContent: homeStartingContent, posts: posts});
 });
 
 
@@ -48,7 +48,6 @@ app.post("/compose", function(req, res){
   };
   posts.push(post);
   res.redirect("/");
-  console.log(posts);
 });
 
 
