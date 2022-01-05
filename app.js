@@ -37,7 +37,13 @@ app.get("/compose", function(req,res){
 });
 
 app.post("/compose", function(req, res){
-  console.log(req.body.tittle);
+  let bodyParserInfo = req.body;
+  const post = {
+    tittle: bodyParserInfo.postTittle,
+    content: bodyParserInfo.postBody,
+  };
+  console.log(post.tittle);
+  console.log(post.content);
 });
 
 
