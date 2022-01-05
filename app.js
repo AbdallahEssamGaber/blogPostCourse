@@ -32,6 +32,11 @@ app.get("/about", function(req,res){
 });
 
 
+app.get("/compose", function(req,res){
+  res.render("compose");
+});
+
+
 
 
 
