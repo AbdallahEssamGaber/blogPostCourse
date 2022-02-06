@@ -6,8 +6,13 @@
   <% posts.forEach(function(post){ %>
 
     <h1><%= post.tittle %></h1>
-    <p><%= post.content.substring(0, 50) + " ..." %> <a href="/posts/<%= post.tittle %>">Read More</a></p>
-
+    <% if(post.content.length > 50){ %>
+      <p><%= post.content.substring(0, 50) + " ..." %> <a href="/posts/<%= post.tittle %>">Read More</a></p>
+    <% } else if (post.content.length > 1) {%>
+      <p><%= post.content%></p>
+    <% } else { %>
+      <p><i>its empty.</i></p>
+    <% } %>
   <% }) %>
 
 
