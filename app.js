@@ -6,7 +6,7 @@ const _ = require("lodash");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 
-mongoose.connect('mongodb://localhost:27017/blogDB');
+mongoose.connect('mongodb+srv://admin-sam:test123@cluster0.h2wey.mongodb.net/blogDB');
 
 const blogSchema = {
   tittle: String,
@@ -94,6 +94,6 @@ app.post("/compose", function(req, res){
 
 
 
-app.listen(3000, function() {
+app.listen(process.env.PORT || 3000, function() {
   console.log("Server started on port 3000");
 });
