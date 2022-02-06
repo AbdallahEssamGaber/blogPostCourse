@@ -43,10 +43,22 @@ app.get("/", function(req,res){
 
 
 
+app.get("/:postName",function(req,res){
+  if(req.params.postName === "compose"){
+    res.render("compose");
+  } else {
+    res.redirect("/posts/"+req.params.postName);
+  }
+
+});
+
+
 app.get("/posts/:postName", function(req,res){
 
-  const postName = _.lowerCase(req.params.postName);
+  const postName = _.toLower(req.params.postName.replace(/\s/g, ''));
+  console.log(postName);
   Blog.findOne({tittleHelper: postName}, function(err, foundPost){
+    console.log(foundPost);
     res.render("post", {postTittle: foundPost.tittle, postContent: foundPost.content});
   });
 
@@ -66,19 +78,19 @@ app.get("/about", function(req,res){
   res.render("about", {aboutContent: aboutContent});
 });
 
-
-app.get("/compose", function(req,res){
-  res.render("compose");
-});
+//
+// app.get("/compose", function(req,res){
+// });
 
 app.post("/compose", function(req, res){
   const bodyParserInfo = req.body;
-
+  const postTittle = bodyParserInfo.postTittle;
+  const postBody = bodyParserInfo.postBody;
 
   const post = new Blog({
-    tittle: bodyParserInfo.postTittle,
-    tittleHelper: _.lowerCase(bodyParserInfo.postTittle),
-    content: bodyParserInfo.postBody,
+    tittle: postTittle,
+    tittleHelper: _.toLower(postTittle.replace(/\s/g, '')),
+    content: postBody
   });
   post.save(function(err){
     if(!err) res.redirect("/")
