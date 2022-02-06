@@ -23,7 +23,7 @@ const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pelle
 const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 
-
+let hide = "none";
 
 
 const app = express();
@@ -43,14 +43,13 @@ app.get("/", function(req,res){
 
 
 
-app.get("/:postName",function(req,res){
-  if(req.params.postName === "compose"){
-    res.render("compose");
-  } else {
-    res.redirect("/posts/"+req.params.postName);
-  }
-
-});
+// app.get("/:postName",function(req,res){
+//   if((req.params.postName === "compose" && req.params.postName === "") || (req.params.postName === "compose" && req.params.postName === " ")){
+//   } else {
+//     res.redirect("/posts/"+req.params.postName);
+//   }
+//
+// });
 
 
 app.get("/posts/:postName", function(req,res){
@@ -58,7 +57,6 @@ app.get("/posts/:postName", function(req,res){
   const postName = _.toLower(req.params.postName.replace(/\s/g, ''));
   console.log(postName);
   Blog.findOne({tittleHelper: postName}, function(err, foundPost){
-    console.log(foundPost);
     res.render("post", {postTittle: foundPost.tittle, postContent: foundPost.content});
   });
 
@@ -78,23 +76,35 @@ app.get("/about", function(req,res){
   res.render("about", {aboutContent: aboutContent});
 });
 
-//
-// app.get("/compose", function(req,res){
-// });
+
+app.get("/compose", function(req, res){
+  res.render("compose", {display: hide});
+  hide = "none";
+})
+
 
 app.post("/compose", function(req, res){
   const bodyParserInfo = req.body;
   const postTittle = bodyParserInfo.postTittle;
   const postBody = bodyParserInfo.postBody;
 
-  const post = new Blog({
-    tittle: postTittle,
-    tittleHelper: _.toLower(postTittle.replace(/\s/g, '')),
-    content: postBody
-  });
-  post.save(function(err){
-    if(!err) res.redirect("/")
-  });
+
+  Blog.findOne({tittle: postTittle}, function(err, foundOne){
+    if(foundOne){
+      hide = "block";
+      res.redirect("/compose");
+    }else {
+      const post = new Blog({
+        tittle: postTittle,
+        tittleHelper: _.toLower(postTittle.replace(/\s/g, '')),
+        content: postBody
+      });
+      post.save(function(err){
+        if(!err) res.redirect("/")
+      });
+
+    }
+  })
 
 
 });
