@@ -3,10 +3,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("lodash");
+require("dotenv").config();
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 
-mongoose.connect('mongodb+srv://admin-sam:test123@cluster0.h2wey.mongodb.net/blogDB');
+mongoose.connect('process.env.SECRET_KEY');
 
 const blogSchema = {
   tittle: String,
